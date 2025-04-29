@@ -2,6 +2,8 @@
 
 👋 Hello! I'm Swiss Tangsatjatham, a Full-Stack Developer with an Aerospace Engineering background. This portfolio showcases my creative approach to web development through an interactive workspace-oriented interface.
 
+Visit my portfolio at [swissspace.com](https://swissspace.com)!
+
 ## 🚀 About This Portfolio
 
 This isn't your typical portfolio website! I've created a unique collaborative workspace experience where you can:
@@ -60,6 +62,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see it in action!
 Feel free to reach out through:
 - 📧 Email: tintinguy01@gmail.com
 - 💻 GitHub: https://github.com/tintinguy01
+- 🌐 Website: [swissspace.com](https://swissspace.com)
 
 ## 📝 License
 
