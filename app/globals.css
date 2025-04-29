@@ -319,6 +319,47 @@ body {
   background: var(--primary);
   color: white;
   border-color: var(--primary);
+  position: relative;
+}
+
+/* Close indicator - mini X on active buttons */
+.close-indicator {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.close-indicator::before,
+.close-indicator::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 2px;
+  background: white;
+  border-radius: 1px;
+}
+
+.close-indicator::before {
+  transform: rotate(45deg);
+}
+
+.close-indicator::after {
+  transform: rotate(-45deg);
+}
+
+.sidebar-button.active:hover .close-indicator {
+  opacity: 1;
+  transform: scale(1);
 }
 
 @keyframes float {
@@ -553,4 +594,43 @@ body {
   .mobile-resize-handle {
     display: block !important;
   }
+}
+
+/* Mobile sidebar close indicator */
+.mobile-close-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-close-indicator::before,
+.mobile-close-indicator::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 1.5px;
+  background: white;
+  border-radius: 1px;
+}
+
+.mobile-close-indicator::before {
+  transform: rotate(45deg);
+}
+
+.mobile-close-indicator::after {
+  transform: rotate(-45deg);
+}
+
+.mobile-sidebar-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -90,17 +90,23 @@ export default function Sidebar({ onSelectCard, activeCards }: SidebarProps) {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2 }}
             >
-              {items.map((item) => (
-                <motion.button
-                  key={item.id}
-                  className={`mobile-sidebar-item ${activeCards.includes(item.id) ? "active" : ""}`}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleItemClick(item.id)}
-                >
-                  <span className="mobile-sidebar-icon">{item.icon}</span>
-                  <span className="mobile-sidebar-label">{item.label}</span>
-                </motion.button>
-              ))}
+              {items.map((item) => {
+                const isActive = activeCards.includes(item.id);
+                return (
+                  <motion.button
+                    key={item.id}
+                    className={`mobile-sidebar-item ${isActive ? "active" : ""}`}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleItemClick(item.id)}
+                  >
+                    <span className="mobile-sidebar-icon">
+                      {item.icon}
+                      {isActive && <span className="mobile-close-indicator"></span>}
+                    </span>
+                    <span className="mobile-sidebar-label">{isActive ? `Close ${item.label}` : item.label}</span>
+                  </motion.button>
+                );
+              })}
             </motion.div>
           )}
         </AnimatePresence>
@@ -111,31 +117,41 @@ export default function Sidebar({ onSelectCard, activeCards }: SidebarProps) {
   // Render desktop sidebar
   return (
     <div className="sidebar">
-      {items.map((item) => (
-        <div key={item.id} className="relative">
-          <motion.button
-            className={`sidebar-button ${activeCards.includes(item.id) ? "active" : ""}`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => handleItemClick(item.id)}
-            onMouseEnter={() => setTooltipVisible(item.id)}
-            onMouseLeave={() => setTooltipVisible(null)}
-            aria-label={item.label}
-          >
-            {item.icon}
-          </motion.button>
-
-          {tooltipVisible === item.id && (
-            <motion.div
-              initial={{ opacity: 0, x: -5 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="absolute left-14 top-1/2 -translate-y-1/2 bg-card-bg px-2 py-1 rounded text-xs whitespace-nowrap z-50 border border-card-border"
+      {items.map((item) => {
+        const isActive = activeCards.includes(item.id);
+        return (
+          <div key={item.id} className="relative">
+            <motion.button
+              className={`sidebar-button ${isActive ? "active" : ""}`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleItemClick(item.id)}
+              onMouseEnter={() => setTooltipVisible(item.id)}
+              onMouseLeave={() => setTooltipVisible(null)}
+              aria-label={item.label}
             >
-              {item.label}
-            </motion.div>
-          )}
-        </div>
-      ))}
+              {isActive ? (
+                <>
+                  {item.icon}
+                  <span className="close-indicator"></span>
+                </>
+              ) : (
+                item.icon
+              )}
+            </motion.button>
+
+            {tooltipVisible === item.id && (
+              <motion.div
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="absolute left-14 top-1/2 -translate-y-1/2 bg-card-bg px-2 py-1 rounded text-xs whitespace-nowrap z-50 border border-card-border"
+              >
+                {isActive ? `Close ${item.label}` : item.label}
+              </motion.div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 } 

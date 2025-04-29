@@ -102,14 +102,25 @@ export default function Portfolio() {
   useEffect(() => {
     const positions = calculatePositions();
     
+    // Try to retrieve any saved card dimensions from localStorage
+    let savedDimensions: Record<string, {width: number, height: number}> = {};
+    try {
+      const saved = localStorage.getItem('cardDimensions');
+      if (saved) {
+        savedDimensions = JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error("Error loading saved dimensions:", e);
+    }
+    
     const initialCards: Card[] = [
       {
         id: "welcome",
         title: "Welcome",
         component: <WelcomeCard />,
         position: positions.welcome,
-        width: isMobile ? positions.mobileWidth : 600,
-        height: isMobile ? positions.mobileHeight : 500,
+        width: savedDimensions.welcome?.width || (isMobile ? positions.mobileWidth : 600),
+        height: savedDimensions.welcome?.height || (isMobile ? positions.mobileHeight : 500),
         color: "#2196f3",
         visible: true
       },
@@ -118,8 +129,8 @@ export default function Portfolio() {
         title: "About Me",
         component: <AboutCard />,
         position: positions.about,
-        width: isMobile ? positions.mobileWidth : 450,
-        height: isMobile ? positions.mobileHeight : 500,
+        width: savedDimensions.about?.width || (isMobile ? positions.mobileWidth : 450),
+        height: savedDimensions.about?.height || (isMobile ? positions.mobileHeight : 500),
         visible: false
       },
       {
@@ -127,8 +138,8 @@ export default function Portfolio() {
         title: "Skills",
         component: <SkillsCard />,
         position: positions.skills,
-        width: isMobile ? positions.mobileWidth : 550,
-        height: isMobile ? positions.mobileHeight : 550,
+        width: savedDimensions.skills?.width || (isMobile ? positions.mobileWidth : 550),
+        height: savedDimensions.skills?.height || (isMobile ? positions.mobileHeight : 550),
         visible: false
       },
       {
@@ -136,8 +147,8 @@ export default function Portfolio() {
         title: "Experience",
         component: <ExperienceCard />,
         position: positions.experience,
-        width: isMobile ? positions.mobileWidth : 500,
-        height: isMobile ? positions.mobileHeight : 500,
+        width: savedDimensions.experience?.width || (isMobile ? positions.mobileWidth : 500),
+        height: savedDimensions.experience?.height || (isMobile ? positions.mobileHeight : 500),
         visible: false
       },
       {
@@ -145,8 +156,8 @@ export default function Portfolio() {
         title: "Projects",
         component: <ProjectsCard />,
         position: positions.projects,
-        width: isMobile ? positions.mobileWidth : 500,
-        height: isMobile ? positions.mobileHeight : 550,
+        width: savedDimensions.projects?.width || (isMobile ? positions.mobileWidth : 500),
+        height: savedDimensions.projects?.height || (isMobile ? positions.mobileHeight : 550),
         visible: false
       },
       {
@@ -154,8 +165,8 @@ export default function Portfolio() {
         title: "Education",
         component: <EducationCard />,
         position: positions.education,
-        width: isMobile ? positions.mobileWidth : 450,
-        height: isMobile ? positions.mobileHeight : 500,
+        width: savedDimensions.education?.width || (isMobile ? positions.mobileWidth : 450),
+        height: savedDimensions.education?.height || (isMobile ? positions.mobileHeight : 500),
         visible: false
       },
       {
@@ -163,8 +174,8 @@ export default function Portfolio() {
         title: "Contact",
         component: <ContactCard />,
         position: positions.contact,
-        width: isMobile ? positions.mobileWidth : 700,
-        height: isMobile ? positions.mobileHeight : 550,
+        width: savedDimensions.contact?.width || (isMobile ? positions.mobileWidth : 700),
+        height: savedDimensions.contact?.height || (isMobile ? positions.mobileHeight : 550),
         visible: false
       }
     ];
@@ -183,16 +194,44 @@ export default function Portfolio() {
     
     const positions = calculatePositions();
     
-    // Update card positions and dimensions
+    // Update card positions but preserve user-set dimensions
     setCards(prevCards => 
       prevCards.map(card => ({
         ...card,
         position: positions[card.id as keyof typeof positions] as { x: number; y: number },
-        width: isMobile ? positions.mobileWidth : card.width,
-        height: isMobile ? positions.mobileHeight : card.height
+        // Only set default dimensions if not already set by user
+        width: card.width || (isMobile ? positions.mobileWidth : getDefaultWidth(card.id)),
+        height: card.height || (isMobile ? positions.mobileHeight : getDefaultHeight(card.id))
       }))
     );
   }, [isMobile, isMounted]);
+
+  // Helper functions to get default dimensions
+  const getDefaultWidth = (cardId: string) => {
+    switch (cardId) {
+      case "welcome": return 600;
+      case "about": return 450;
+      case "skills": return 550;
+      case "experience": return 500;
+      case "projects": return 500;
+      case "education": return 450;
+      case "contact": return 700;
+      default: return 500;
+    }
+  };
+  
+  const getDefaultHeight = (cardId: string) => {
+    switch (cardId) {
+      case "welcome": return 500;
+      case "about": return 500;
+      case "skills": return 550;
+      case "experience": return 500;
+      case "projects": return 550;
+      case "education": return 500;
+      case "contact": return 550;
+      default: return 500;
+    }
+  };
 
   const bringCardToFront = (id: string) => {
     const newZIndex = highestZIndex + 1;
@@ -211,6 +250,34 @@ export default function Portfolio() {
         card.id === id ? { ...card, position: newPos } : card
       )
     );
+  };
+  
+  // Add a new function to update card dimensions
+  const handleCardResize = (id: string, newWidth: number, newHeight: number) => {
+    // Use setTimeout to avoid updating state during render
+    setTimeout(() => {
+      setCards(prevCards => {
+        const updatedCards = prevCards.map(card =>
+          card.id === id ? { ...card, width: newWidth, height: newHeight } : card
+        );
+        
+        // Save all card dimensions to localStorage
+        try {
+          const dimensionsToSave = updatedCards.reduce((acc, card) => {
+            if (card.width && card.height) {
+              acc[card.id] = { width: card.width, height: card.height };
+            }
+            return acc;
+          }, {} as Record<string, {width: number, height: number}>);
+          
+          localStorage.setItem('cardDimensions', JSON.stringify(dimensionsToSave));
+        } catch (e) {
+          console.error("Error saving card dimensions:", e);
+        }
+        
+        return updatedCards;
+      });
+    }, 0);
   };
   
   const toggleCardVisibility = (id: string) => {
@@ -267,8 +334,8 @@ export default function Portfolio() {
         toggleCardVisibility(cardId);
         setTimeout(() => bringCardToFront(cardId), 100);
       } else {
-        // If already visible, just bring to front
-        bringCardToFront(cardId);
+        // If already visible, toggle it off (close it) instead of just bringing to front
+        toggleCardVisibility(cardId);
       }
     }
   };
@@ -294,6 +361,7 @@ export default function Portfolio() {
             onDragEnd={handleCardDragEnd}
             bringToFront={bringCardToFront}
             onClose={() => toggleCardVisibility(card.id)}
+            onResize={handleCardResize}
           >
             {card.component}
           </DraggableCard>
