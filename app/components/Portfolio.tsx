@@ -69,7 +69,7 @@ export default function Portfolio() {
       const mobileWidth = Math.min(450, window.innerWidth - 20);
       const mobileHeight = 600; // Increased height for welcome card
       const mobileX = 0; // Will be centered with CSS transform
-      const mobileY = 100; // Start from the top with enough space for the header
+      const mobileY = 0; // Will be centered with CSS transform
       
       return {
         welcome: { x: mobileX, y: mobileY },

@@ -196,7 +196,7 @@ export default function ProjectsCard() {
                           href={currentPrj.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                          className="flex items-center gap-1 px-3 py-1 rounded-md text-sm text-white bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >

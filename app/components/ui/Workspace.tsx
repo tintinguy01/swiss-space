@@ -140,11 +140,12 @@ export default function Workspace({ children, isMobile = false }: WorkspaceProps
         ref={workspaceRef}
       >
         <motion.div
-          className="workspace-content mobile-workspace-content"
+          className="workspace-content"
           style={{
             position: "relative",
-            height: "5000px",
-            width: "100vw"
+            height: "100%",
+            width: "100vw",
+            overflow: "hidden"
           }}
         >
           {children}

@@ -45,11 +45,10 @@ export default function DraggableCard({
   useEffect(() => {
     if (isMobile && initialPosRef.current) {
       initialPosRef.current = false;
-      const mobileWidth = Math.min(window.innerWidth - 20, width);
-      const mobileHeight = Math.min(window.innerHeight - 100, height);
       
-      const newPosX = (window.innerWidth - mobileWidth) / 2;
-      const newPosY = Math.max(70, (window.innerHeight - mobileHeight) / 3);
+      // For mobile we use CSS transform to center, so position is 0,0
+      const newPosX = 0;
+      const newPosY = 0;
       
       setPosition({ x: newPosX, y: newPosY });
       
@@ -178,21 +177,17 @@ export default function DraggableCard({
         setIsDragging(false);
         
         if (isMobile) {
-          // For mobile, only update the Y position
-          const newPos = {
-            x: position.x,
-            y: position.y + info.offset.y
+          // For mobile, don't update position since workspace is not scrollable
+          // Just reset position to where it was
+          if (onDragEnd) onDragEnd(id, position);
+        } else {
+          // For desktop, update both X and Y
+          const newPos = { 
+            x: position.x + info.offset.x, 
+            y: position.y + info.offset.y 
           };
           setPosition(newPos);
           if (onDragEnd) onDragEnd(id, newPos);
-        } else {
-          // For desktop, update both X and Y
-        const newPos = { 
-          x: position.x + info.offset.x, 
-          y: position.y + info.offset.y 
-        };
-        setPosition(newPos);
-        if (onDragEnd) onDragEnd(id, newPos);
         }
       }}
       onClick={() => {
