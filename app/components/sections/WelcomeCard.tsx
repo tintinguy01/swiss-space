@@ -159,7 +159,7 @@ export default function WelcomeCard() {
           Welcome to My Portfolio
         </h1>
         <p className="welcome-subtitle text-xl md:text-2xl mt-4 text-center text-white">
-          I&apos;m Swiss Tangsatjatham, a Full-Stack Developer & Aerospace Engineer
+          I&apos;m Swiss Tangsatjatham, <br/> a Self-Taught Full-Stack Developer
         </p>
       </motion.div>
       
