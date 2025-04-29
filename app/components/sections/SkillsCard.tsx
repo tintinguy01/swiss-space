@@ -158,7 +158,7 @@ export default function SkillsCard() {
             onClick={() => setFilter(filter === category.name ? null : category.name)}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm ${
               filter === category.name 
-                ? 'bg-primary text-white shadow-md' 
+                ? 'bg-primary shadow-md' 
                 : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20'
             } transition-all cursor-pointer hover:shadow-md`}
             whileHover={isInitialRender ? {} : { scale: 1.05, y: -2 }}
