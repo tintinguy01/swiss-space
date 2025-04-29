@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ✨ Swiss's Interactive Portfolio
 
-## Getting Started
+👋 Hello! I'm Swiss Tangsatjatham, a Full-Stack Developer with an Aerospace Engineering background. This portfolio showcases my creative approach to web development through an interactive desktop-inspired interface.
 
-First, run the development server:
+## 🚀 About This Portfolio
+
+This isn't your typical portfolio website! I've created a unique window-based UI where you can:
+
+- 🖱️ Drag and resize cards like a desktop environment
+- 🔍 Explore different aspects of my professional journey
+- 🌓 Toggle between dark and light modes
+- ✉️ Contact me directly through an integrated form
+- 🎯 Experience smooth animations and transitions
+
+Think of it as a playful reflection of how I approach development: innovative, detail-oriented, and with a focus on user experience!
+
+## 🛠️ Built With My Favorite Tech Stack
+
+- ⚛️ **React 19** & **Next.js 15** - For a blazing fast interface
+- 🎨 **Tailwind CSS** - For beautiful styling without the hassle
+- 🎬 **Framer Motion** & **GSAP** - For those satisfying animations
+- 🔄 **TypeScript** - Because type safety is important!
+- 📧 **EmailJS** - For seamless contact functionality
+- 🎉 **Canvas Confetti** - For those little moments of delight
+
+## 🔧 Project Highlights
+
+In this portfolio, you'll discover:
+
+- Interactive cards showcasing my professional experience and skills
+- Creative projects I've built with various technologies
+- My educational background bridging aerospace engineering and software development
+- A direct way to contact me and start a conversation about potential collaboration
+
+## 🚦 Getting Started
+
+Want to run this project locally? Follow these steps:
 
 ```bash
+# Clone the repository
+git clone https://github.com/tintinguy01/my-portfolio.git
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to see it in action!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📂 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 📁 `app/components/sections/` - Individual cards (About, Skills, Projects, etc.)
+- 📁 `app/components/ui/` - Reusable UI components
+- 📄 `app/components/Portfolio.tsx` - Main component orchestrating the interface
 
-## Learn More
+## 🔗 Connect With Me
 
-To learn more about Next.js, take a look at the following resources:
+Feel free to reach out through:
+- 📧 Email: tintinguy01@gmail.com
+- 💻 GitHub: https://github.com/tintinguy01
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is open source and available under the MIT license. Feel free to fork it and make it your own!
