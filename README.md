@@ -64,6 +64,16 @@ Feel free to reach out through:
 - 💻 GitHub: https://github.com/tintinguy01
 - 🌐 Website: [swissspace.com](https://swissspace.com/)
 
+## 🛠️ Troubleshooting
+
+If you encounter build errors related to missing dependencies, ensure these packages are installed:
+
+```bash
+npm install clsx tailwind-merge
+```
+
+This project uses utility functions for Tailwind class management that depend on these packages.
+
 ## 📝 License
 
 This project is open source and available under the MIT license. Feel free to fork it and make it your own!
