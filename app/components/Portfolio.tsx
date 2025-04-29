@@ -67,8 +67,8 @@ export default function Portfolio() {
     // If mobile, use centered positioning
     if (isMobile) {
       const mobileWidth = Math.min(450, window.innerWidth - 20);
-      const mobileHeight = 500;
-      const mobileX = (window.innerWidth - mobileWidth) / 2;
+      const mobileHeight = 600; // Increased height for welcome card
+      const mobileX = 0; // Will be centered with CSS transform
       const mobileY = 100; // Start from the top with enough space for the header
       
       return {
@@ -127,8 +127,8 @@ export default function Portfolio() {
         title: "Skills",
         component: <SkillsCard />,
         position: positions.skills,
-        width: isMobile ? positions.mobileWidth : 450,
-        height: isMobile ? positions.mobileHeight : 500,
+        width: isMobile ? positions.mobileWidth : 550,
+        height: isMobile ? positions.mobileHeight : 550,
         visible: false
       },
       {

@@ -55,29 +55,32 @@ export default function ExperienceCard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white/5 dark:bg-black/5 rounded-lg p-3 border border-black/10 dark:border-white/10 shadow-sm"
+            className="bg-white/5 dark:bg-black/5 rounded-lg p-3 border border-black/10 dark:border-white/10 shadow-sm min-h-[135px]"
           >
             <div 
-              className="cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+              className="cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 rounded-lg h-full"
               onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
             >
-              <div className="flex justify-between items-start">
-                <div>
+              <div className="relative min-h-[90px]">
+                {/* Date and location in top right corner */}
+                <div className="text-xs opacity-75 absolute right-0 bottom-0 text-right">
+                  <div className="flex items-center justify-end whitespace-nowrap mb-1">
+                    <FaCalendarAlt className="inline-block mr-1 flex-shrink-0" size={10} />
+                    <span>{exp.period}</span>
+                  </div>
+                  <div className="flex items-center justify-end whitespace-nowrap">
+                    <FaMapMarkerAlt className="inline-block mr-1 flex-shrink-0" size={10} />
+                    <span>{exp.location}</span>
+                  </div>
+                </div>
+                
+                {/* Job title and company with space for date/location */}
+                <div className="pr-[170px]">
                   <h3 className="text-base font-semibold flex items-center">
-                    <FaBriefcase className="inline-block mr-2 text-primary" />
+                    <FaBriefcase className="inline-block mr-2 text-primary flex-shrink-0" />
                     {exp.title}
                   </h3>
                   <p className="text-sm font-medium">{exp.company}</p>
-                </div>
-                <div className="text-xs opacity-75 min-w-[110px] text-right">
-                  <div className="flex items-center justify-end mb-1">
-                    <FaCalendarAlt className="inline-block mr-1" size={10} />
-                    <span>{exp.period}</span>
-                  </div>
-                  <div className="flex items-center justify-end">
-                    <FaMapMarkerAlt className="inline-block mr-1" size={10} />
-                    <span>{exp.location}</span>
-                  </div>
                 </div>
               </div>
               
@@ -110,4 +113,4 @@ export default function ExperienceCard() {
       </div>
     </div>
   );
-} 
+}

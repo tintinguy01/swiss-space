@@ -44,11 +44,11 @@ export default function AboutCard() {
         className="text-center"
       >
         <h2 className="text-2xl font-bold mb-1">Swiss Tangsatjatham</h2>
-        <p className="text-lg font-medium">Full-Stack Developer & Aerospace Engineer</p>
+        <p className="text-lg font-medium">Self-taught Full-Stack Developer</p>
         
         <motion.button
           onClick={handleDownloadResume}
-          className="mt-2 px-4 py-2 bg-primary text-white rounded-lg inline-flex items-center gap-2
+          className="mt-2 px-4 py-2 bg-primary rounded-lg inline-flex items-center gap-2
                    hover:bg-primary/90 transition-all shadow-sm text-sm cursor-pointer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}

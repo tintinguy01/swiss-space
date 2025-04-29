@@ -130,7 +130,7 @@ export default function DraggableCard({
   return (
     <motion.div
       ref={cardRef}
-      className={`draggable-card ${isMobile ? 'mobile-card' : ''}`}
+      className={`draggable-card ${isMobile ? 'mobile-card' : ''} ${isDragging ? 'dragging' : ''}`}
       style={customCardStyle}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ 
@@ -145,9 +145,8 @@ export default function DraggableCard({
         damping: 40,
         mass: 1
       }}
-      drag
+      drag={true}
       dragMomentum={false}
-      dragConstraints={false}
       dragTransition={{ 
         power: 0,
         timeConstant: 0,
@@ -161,15 +160,40 @@ export default function DraggableCard({
       onDragStart={() => {
         setIsDragging(true);
         if (bringToFront) bringToFront(id);
+        
+        // For mobile dragging, apply custom CSS variables
+        if (isMobile && cardRef.current) {
+          cardRef.current.style.setProperty('--drag-x', `0px`);
+          cardRef.current.style.setProperty('--drag-y', `0px`);
+        }
       }}
-      onDragEnd={(_, info) => {
+      onDrag={(e, info) => {
+        // For mobile dragging, update CSS variables
+        if (isMobile && cardRef.current) {
+          cardRef.current.style.setProperty('--drag-x', `${info.offset.x}px`);
+          cardRef.current.style.setProperty('--drag-y', `${info.offset.y}px`);
+        }
+      }}
+      onDragEnd={(e, info) => {
         setIsDragging(false);
-        const newPos = { 
-          x: position.x + info.offset.x, 
-          y: position.y + info.offset.y 
-        };
-        setPosition(newPos);
-        if (onDragEnd) onDragEnd(id, newPos);
+        
+        if (isMobile) {
+          // For mobile, only update the Y position
+          const newPos = {
+            x: position.x,
+            y: position.y + info.offset.y
+          };
+          setPosition(newPos);
+          if (onDragEnd) onDragEnd(id, newPos);
+        } else {
+          // For desktop, update both X and Y
+          const newPos = { 
+            x: position.x + info.offset.x, 
+            y: position.y + info.offset.y 
+          };
+          setPosition(newPos);
+          if (onDragEnd) onDragEnd(id, newPos);
+        }
       }}
       onClick={() => {
         if (bringToFront) bringToFront(id);
@@ -198,14 +222,15 @@ export default function DraggableCard({
       </div>
       <div 
         ref={contentRef}
-        className="card-content responsive-content" 
+        className="card-content responsive-content overflow-y-auto"
+        style={{ maxHeight: isMobile ? '70vh' : 'auto' }}
       >
         {children}
       </div>
       
-      {/* Resize handles */}
+      {/* Resize handles - now work on mobile too */}
       <div 
-        className="resizable-handle se"
+        className={`resizable-handle se ${isMobile ? 'mobile-resize-handle' : ''}`}
         onMouseDown={(e) => {
           e.stopPropagation();
           
@@ -230,91 +255,121 @@ export default function DraggableCard({
           document.addEventListener("mousemove", handleMouseMove);
           document.addEventListener("mouseup", handleMouseUp);
         }}
-      />
-      
-      <div 
-        className="resizable-handle sw"
-        onMouseDown={(e) => {
+        onTouchStart={(e) => {
+          if (!isMobile) return;
           e.stopPropagation();
           
-          let startX = e.clientX;
-          let startY = e.clientY;
+          let startX = e.touches[0].clientX;
+          let startY = e.touches[0].clientY;
           
-          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-            const dx = mouseMoveEvent.clientX - startX;
-            const dy = mouseMoveEvent.clientY - startY;
-            handleResize("sw", dx, dy);
+          const handleTouchMove = (touchMoveEvent: TouchEvent) => {
+            const dx = touchMoveEvent.touches[0].clientX - startX;
+            const dy = touchMoveEvent.touches[0].clientY - startY;
+            handleResize("se", dx, dy);
             
             // Update starting position for smoother, incremental movement
-            startX = mouseMoveEvent.clientX;
-            startY = mouseMoveEvent.clientY;
+            startX = touchMoveEvent.touches[0].clientX;
+            startY = touchMoveEvent.touches[0].clientY;
           };
           
-          const handleMouseUp = () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("mouseup", handleMouseUp);
+          const handleTouchEnd = () => {
+            document.removeEventListener("touchmove", handleTouchMove);
+            document.removeEventListener("touchend", handleTouchEnd);
           };
           
-          document.addEventListener("mousemove", handleMouseMove);
-          document.addEventListener("mouseup", handleMouseUp);
+          document.addEventListener("touchmove", handleTouchMove);
+          document.addEventListener("touchend", handleTouchEnd);
         }}
       />
       
-      <div 
-        className="resizable-handle ne"
-        onMouseDown={(e) => {
-          e.stopPropagation();
+      {/* Other resize handles */}
+      {!isMobile && (
+        <>
+          <div 
+            className="resizable-handle sw"
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              
+              let startX = e.clientX;
+              let startY = e.clientY;
+              
+              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+                const dx = mouseMoveEvent.clientX - startX;
+                const dy = mouseMoveEvent.clientY - startY;
+                handleResize("sw", dx, dy);
+                
+                // Update starting position for smoother, incremental movement
+                startX = mouseMoveEvent.clientX;
+                startY = mouseMoveEvent.clientY;
+              };
+              
+              const handleMouseUp = () => {
+                document.removeEventListener("mousemove", handleMouseMove);
+                document.removeEventListener("mouseup", handleMouseUp);
+              };
+              
+              document.addEventListener("mousemove", handleMouseMove);
+              document.addEventListener("mouseup", handleMouseUp);
+            }}
+          />
           
-          let startX = e.clientX;
-          let startY = e.clientY;
+          <div 
+            className="resizable-handle ne"
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              
+              let startX = e.clientX;
+              let startY = e.clientY;
+              
+              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+                const dx = mouseMoveEvent.clientX - startX;
+                const dy = mouseMoveEvent.clientY - startY;
+                handleResize("ne", dx, dy);
+                
+                // Update starting position for smoother, incremental movement
+                startX = mouseMoveEvent.clientX;
+                startY = mouseMoveEvent.clientY;
+              };
+              
+              const handleMouseUp = () => {
+                document.removeEventListener("mousemove", handleMouseMove);
+                document.removeEventListener("mouseup", handleMouseUp);
+              };
+              
+              document.addEventListener("mousemove", handleMouseMove);
+              document.addEventListener("mouseup", handleMouseUp);
+            }}
+          />
           
-          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-            const dx = mouseMoveEvent.clientX - startX;
-            const dy = mouseMoveEvent.clientY - startY;
-            handleResize("ne", dx, dy);
-            
-            // Update starting position for smoother, incremental movement
-            startX = mouseMoveEvent.clientX;
-            startY = mouseMoveEvent.clientY;
-          };
-          
-          const handleMouseUp = () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("mouseup", handleMouseUp);
-          };
-          
-          document.addEventListener("mousemove", handleMouseMove);
-          document.addEventListener("mouseup", handleMouseUp);
-        }}
-      />
-      
-      <div 
-        className="resizable-handle nw"
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          
-          let startX = e.clientX;
-          let startY = e.clientY;
-          
-          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-            const dx = mouseMoveEvent.clientX - startX;
-            const dy = mouseMoveEvent.clientY - startY;
-            handleResize("nw", dx, dy);
-            
-            // Update starting position for smoother, incremental movement
-            startX = mouseMoveEvent.clientX;
-            startY = mouseMoveEvent.clientY;
-          };
-          
-          const handleMouseUp = () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("mouseup", handleMouseUp);
-          };
-          
-          document.addEventListener("mousemove", handleMouseMove);
-          document.addEventListener("mouseup", handleMouseUp);
-        }}
-      />
+          <div 
+            className="resizable-handle nw"
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              
+              let startX = e.clientX;
+              let startY = e.clientY;
+              
+              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+                const dx = mouseMoveEvent.clientX - startX;
+                const dy = mouseMoveEvent.clientY - startY;
+                handleResize("nw", dx, dy);
+                
+                // Update starting position for smoother, incremental movement
+                startX = mouseMoveEvent.clientX;
+                startY = mouseMoveEvent.clientY;
+              };
+              
+              const handleMouseUp = () => {
+                document.removeEventListener("mousemove", handleMouseMove);
+                document.removeEventListener("mouseup", handleMouseUp);
+              };
+              
+              document.addEventListener("mousemove", handleMouseMove);
+              document.addEventListener("mouseup", handleMouseUp);
+            }}
+          />
+        </>
+      )}
     </motion.div>
   );
 } 

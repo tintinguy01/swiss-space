@@ -1,11 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 
 export default function WelcomeCard() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Detect mobile screens
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
   
   // Animated background effect
   useEffect(() => {
@@ -129,7 +144,7 @@ export default function WelcomeCard() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-between items-center p-6 h-full relative overflow-hidden">
+    <div className={`flex flex-col justify-between items-center p-6 h-full relative overflow-y-auto ${isMobile ? 'min-h-[600px]' : ''}`}>
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full"
@@ -140,22 +155,22 @@ export default function WelcomeCard() {
         transition={{ duration: 1.5, ease: "easeInOut" }}
         className="relative z-10 mt-4 w-full"
       >
-        <h1 className="welcome-title text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary">
+        <h1 className="welcome-title text-4xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary">
           Welcome to My Portfolio
         </h1>
-        <p className="welcome-subtitle text-2xl mt-4 text-center">
+        <p className="welcome-subtitle text-xl md:text-2xl mt-4 text-center">
           I&apos;m Swiss Tangsatjatham, a Full-Stack Developer & Aerospace Engineer
         </p>
       </motion.div>
       
-      <div className="welcome-instructions text-center relative z-10 w-full">
-        <p className="text-xl mb-4">Feel free to explore this interactive portfolio!</p>
-        <div className="flex gap-4 justify-center items-center flex-wrap mb-4">
+      <div className="welcome-instructions text-center relative z-10 w-full mt-8">
+        <p className="text-lg md:text-xl mb-4">Feel free to explore this interactive portfolio!</p>
+        <div className="flex flex-col md:flex-row gap-4 justify-center items-center md:flex-wrap mb-4">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
-            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md"
+            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md w-full md:w-auto"
           >
             <span className="text-base font-medium mb-1">Click icons in sidebar</span>
             <span className="text-sm opacity-75">to open different sections</span>
@@ -165,7 +180,7 @@ export default function WelcomeCard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5 }}
-            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md"
+            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md w-full md:w-auto"
           >
             <span className="text-base font-medium mb-1">Drag cards around</span>
             <span className="text-sm opacity-75">to organize your workspace</span>
@@ -176,7 +191,7 @@ export default function WelcomeCard() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8 }}
-          className="instruction-item inline-flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md"
+          className="instruction-item inline-flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md mb-8"
         >
           <motion.div
             animate={{ y: [0, -8, 0] }}
