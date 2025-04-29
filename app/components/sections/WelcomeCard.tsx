@@ -155,7 +155,7 @@ export default function WelcomeCard() {
         transition={{ duration: 1.5, ease: "easeInOut" }}
         className="relative z-10 mt-4 w-full"
       >
-        <h1 className="welcome-title text-4xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary">
+        <h1 className="welcome-title text-2xl md:text-3xl sm:text-4xl font-bold text-center bg-clip-text text-white bg-gradient-to-r from-primary via-accent to-secondary">
           Welcome to My Portfolio
         </h1>
         <p className="welcome-subtitle text-xl md:text-2xl mt-4 text-center">
