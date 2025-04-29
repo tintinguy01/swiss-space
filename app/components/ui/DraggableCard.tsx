@@ -100,18 +100,18 @@ export default function DraggableCard({
   
   const handleResize = (direction: string, movementX: number, movementY: number) => {
     // Create new dimensions based on the current values
-    const newWidth = direction.includes("e") 
+      const newWidth = direction.includes("e") 
       ? Math.max(280, dimensions.width + movementX)
-      : direction.includes("w") 
+        : direction.includes("w") 
         ? Math.max(280, dimensions.width - movementX)
         : dimensions.width;
-        
-    const newHeight = direction.includes("s")
+          
+      const newHeight = direction.includes("s")
       ? Math.max(200, dimensions.height + movementY)
-      : direction.includes("n")
+        : direction.includes("n")
         ? Math.max(200, dimensions.height - movementY)
         : dimensions.height;
-    
+          
     // Apply new dimensions to the card directly
     if (cardRef.current) {
       cardRef.current.style.width = `${newWidth}px`;
@@ -243,161 +243,29 @@ export default function DraggableCard({
       {/* Resize handles - only for desktop */}
       {!isMobile && (
         <>
-          <div 
-            className="resizable-handle se"
-            onMouseDown={(e) => {
-              e.stopPropagation();
+      <div 
+        className="resizable-handle se"
+        onMouseDown={(e) => {
+          e.stopPropagation();
               e.preventDefault();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-                mouseMoveEvent.preventDefault();
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("se", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
-                
-                // Now update React state with the final dimensions
-                setDimensions({
-                  width: dimensions.width,
-                  height: dimensions.height
-                });
-                
-                // Ensure the final dimensions are saved to parent component
-                if (onResize) {
-                  // Use a timeout to ensure we're not updating state during render
-                  setTimeout(() => {
-                    onResize(id, dimensions.width, dimensions.height);
-                  }, 0);
-                }
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
           
-          <div 
-            className="resizable-handle sw"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-                mouseMoveEvent.preventDefault();
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("sw", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
-                
-                // Now update React state with the final dimensions
-                setDimensions({
-                  width: dimensions.width,
-                  height: dimensions.height
-                });
-                
-                // Ensure the final dimensions are saved to parent component
-                if (onResize) {
-                  // Use a timeout to ensure we're not updating state during render
-                  setTimeout(() => {
-                    onResize(id, dimensions.width, dimensions.height);
-                  }, 0);
-                }
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
+          let startX = e.clientX;
+          let startY = e.clientY;
           
-          <div 
-            className="resizable-handle ne"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
                 mouseMoveEvent.preventDefault();
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("ne", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
-                
-                // Now update React state with the final dimensions
-                setDimensions({
-                  width: dimensions.width,
-                  height: dimensions.height
-                });
-                
-                // Ensure the final dimensions are saved to parent component
-                if (onResize) {
-                  // Use a timeout to ensure we're not updating state during render
-                  setTimeout(() => {
-                    onResize(id, dimensions.width, dimensions.height);
-                  }, 0);
-                }
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("se", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
           
-          <div 
-            className="resizable-handle nw"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-                mouseMoveEvent.preventDefault();
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("nw", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
                 
                 // Now update React state with the final dimensions
                 setDimensions({
@@ -412,12 +280,144 @@ export default function DraggableCard({
                     onResize(id, dimensions.width, dimensions.height);
                   }, 0);
                 }
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
+      
+      <div 
+        className="resizable-handle sw"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+              e.preventDefault();
+          
+          let startX = e.clientX;
+          let startY = e.clientY;
+          
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+                mouseMoveEvent.preventDefault();
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("sw", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
+          
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+                
+                // Now update React state with the final dimensions
+                setDimensions({
+                  width: dimensions.width,
+                  height: dimensions.height
+                });
+                
+                // Ensure the final dimensions are saved to parent component
+                if (onResize) {
+                  // Use a timeout to ensure we're not updating state during render
+                  setTimeout(() => {
+                    onResize(id, dimensions.width, dimensions.height);
+                  }, 0);
+                }
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
+      
+      <div 
+        className="resizable-handle ne"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+              e.preventDefault();
+          
+          let startX = e.clientX;
+          let startY = e.clientY;
+          
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+                mouseMoveEvent.preventDefault();
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("ne", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
+          
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+                
+                // Now update React state with the final dimensions
+                setDimensions({
+                  width: dimensions.width,
+                  height: dimensions.height
+                });
+                
+                // Ensure the final dimensions are saved to parent component
+                if (onResize) {
+                  // Use a timeout to ensure we're not updating state during render
+                  setTimeout(() => {
+                    onResize(id, dimensions.width, dimensions.height);
+                  }, 0);
+                }
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
+      
+      <div 
+        className="resizable-handle nw"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+              e.preventDefault();
+          
+          let startX = e.clientX;
+          let startY = e.clientY;
+          
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+                mouseMoveEvent.preventDefault();
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("nw", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
+          
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+                
+                // Now update React state with the final dimensions
+                setDimensions({
+                  width: dimensions.width,
+                  height: dimensions.height
+                });
+                
+                // Ensure the final dimensions are saved to parent component
+                if (onResize) {
+                  // Use a timeout to ensure we're not updating state during render
+                  setTimeout(() => {
+                    onResize(id, dimensions.width, dimensions.height);
+                  }, 0);
+                }
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
         </>
       )}
     </motion.div>

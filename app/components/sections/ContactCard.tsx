@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaEnvelope,
@@ -39,40 +39,56 @@ export default function ContactCard() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
+  // Initialize EmailJS with your public key
+  useEffect(() => {
+    // Debug log for environment variables
+    console.log("EmailJS Config:", {
+      serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ? "✅ Set" : "❌ Missing",
+      templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ? "✅ Set" : "❌ Missing",
+      autoReplyTemplateId: process.env.NEXT_PUBLIC_EMAILJS_AUTOREPLY_TEMPLATE_ID ? "✅ Set" : "❌ Missing",
+      publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ? "✅ Set" : "❌ Missing"
+    });
+    
+    if (process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY) {
+      console.log("Initializing EmailJS");
+      emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
+    } else {
+      console.error("EmailJS public key is missing");
+    }
+  }, []);
+
   const validateForm = () => {
-    let valid = true;
-    const newErrors: FormErrors = {
+    const errors: FormErrors = {
       name: "",
       email: "",
       message: "",
     };
 
-    // Validate name
+    // Name validation
     if (!formState.name.trim()) {
-      newErrors.name = "Name is required";
-      valid = false;
+      errors.name = "Name is required";
     }
 
-    // Validate email
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formState.email.trim()) {
-      newErrors.email = "Email is required";
-      valid = false;
-    } else if (!/^\S+@\S+\.\S+$/.test(formState.email)) {
-      newErrors.email = "Please enter a valid email";
-      valid = false;
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formState.email)) {
+      errors.email = "Please enter a valid email";
     }
 
-    // Validate message
+    // Message validation
     if (!formState.message.trim()) {
-      newErrors.message = "Message is required";
-      valid = false;
+      errors.message = "Message is required";
+    } else if (formState.message.trim().length < 10) {
+      errors.message = "Message must be at least 10 characters";
     }
 
-    setFormErrors(newErrors);
-    return valid;
+    setFormErrors(errors);
+    return errors;
   };
 
   const handleChange = (
@@ -105,56 +121,96 @@ export default function ContactCard() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
-    
+    setSubmitError("");
+    console.log("Form submission started");
+
+    // Validate form
+    const errors = validateForm();
+    if (Object.values(errors).some(error => error !== "")) {
+      console.log("Form validation failed", errors);
+      return;
+    }
+
     setIsSubmitting(true);
-    setSubmitError('');
-    
+    console.log("Form is valid, attempting to send email");
+
     try {
-      // Use environment variables for EmailJS credentials
+      // Get environment variables
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+      const autoReplyTemplateId = process.env.NEXT_PUBLIC_EMAILJS_AUTOREPLY_TEMPLATE_ID;
       
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS configuration is missing. Please check your environment variables.');
+      console.log("EmailJS params:", { 
+        serviceId: serviceId ? "✅ Available" : "❌ Missing", 
+        templateId: templateId ? "✅ Available" : "❌ Missing",
+        autoReplyTemplateId: autoReplyTemplateId ? "✅ Available" : "❌ Missing"
+      });
+      
+      if (!serviceId || !templateId) {
+        throw new Error("EmailJS primary configuration is missing");
       }
-      
-      const result = await emailjs.sendForm(
-        serviceId,
-        templateId,
-        e.currentTarget,
-        publicKey
-      );
-      
-      if (result.text === 'OK') {
-        // Show success toast
-        toast.success('Message Sent!', 'Your message has been sent successfully.');
+
+      // Prepare templates parameters
+      const templateParams = {
+        from_name: formState.name,
+        from_email: formState.email,
+        message: formState.message,
+        to_name: formState.name,  // Include all possible variables
+        to_email: formState.email,
+        reply_to: formState.email,
+        user_name: formState.name,
+        user_email: formState.email
+      };
+
+      // Send email to site owner first - this was working before
+      console.log("Sending email to site owner...");
+      try {
+        const ownerEmailResult = await emailjs.send(
+          serviceId,
+          templateId,
+          templateParams
+        );
+        console.log("Owner email sent successfully:", ownerEmailResult.status, ownerEmailResult.text);
         
-        setSubmitted(true);
-        // Reset form after successful submission
-        setFormState({
-          name: '',
-          email: '',
-          message: ''
-        });
+        // Only try to send auto-reply if owner email succeeded
+        if (autoReplyTemplateId) {
+          console.log("Sending auto-reply email to user...");
+          try {
+            const userEmailResult = await emailjs.send(
+              serviceId,
+              autoReplyTemplateId,
+              templateParams
+            );
+            console.log("Auto-reply email sent successfully:", userEmailResult.status, userEmailResult.text);
+          } catch (userEmailError) {
+            console.error("Failed to send auto-reply email:", userEmailError);
+            // We don't throw here as the main email was sent successfully
+          }
+        } else {
+          console.log("Skipping auto-reply - no template ID configured");
+        }
         
-        // Reset submission status after a delay
+        // Success path - only if owner email was sent
+        console.log("Email process completed successfully");
+        setFormState({ name: "", email: "", message: "" });
+        setFormErrors({ name: "", email: "", message: "" });
+        setFormSubmitted(true);
+        toast.success("Message sent successfully!");
+
+        // Reset submission status after delay
         setTimeout(() => {
-          setSubmitted(false);
+          setFormSubmitted(false);
         }, 5000);
-      } else {
-        throw new Error('Failed to send message');
+      } catch (ownerEmailError) {
+        console.error("Failed to send email to owner:", ownerEmailError);
+        throw ownerEmailError; // Rethrow to be caught by the outer catch
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setSubmitError(err.message);
-        toast.error('Error Sending Message', err.message);
-      } else {
-        setSubmitError('An unexpected error occurred');
-        toast.error('Error Sending Message', 'An unexpected error occurred');
-      }
+    } catch (error) {
+      console.error("Email error:", error);
+      setSubmitError(
+        "Failed to send message. Please try again or contact directly via email."
+      );
+      toast.error("Failed to send message");
     } finally {
       setIsSubmitting(false);
     }
@@ -219,7 +275,7 @@ export default function ContactCard() {
       <div className="flex-1 flex flex-col md:flex-row gap-4 overflow-auto p-3">
         {/* Contact Form */}
         <div className="md:w-4/5 relative">
-          {submitted ? (
+          {formSubmitted ? (
             <motion.div
               className="flex flex-col items-center justify-center h-full text-center p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
               initial={{ opacity: 0 }}
