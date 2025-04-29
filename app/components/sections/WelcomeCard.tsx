@@ -158,50 +158,64 @@ export default function WelcomeCard() {
         <h1 className="welcome-title text-2xl md:text-3xl sm:text-4xl font-bold text-center bg-clip-text text-white bg-gradient-to-r from-primary via-accent to-secondary">
           Welcome to My Portfolio
         </h1>
-        <p className="welcome-subtitle text-xl md:text-2xl mt-4 text-center">
+        <p className="welcome-subtitle text-xl md:text-2xl mt-4 text-center text-white">
           I&apos;m Swiss Tangsatjatham, a Full-Stack Developer & Aerospace Engineer
         </p>
       </motion.div>
       
       <div className="welcome-instructions text-center relative z-10 w-full mt-8">
-        <p className="text-lg md:text-xl mb-4">Feel free to explore this interactive portfolio!</p>
+        <p className="text-lg md:text-xl mb-4 text-white">Feel free to explore this interactive portfolio!</p>
         <div className="flex flex-col md:flex-row gap-4 justify-center items-center md:flex-wrap mb-4">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
-            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md w-full md:w-auto"
+            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg text-white border border-card-border backdrop-blur-sm shadow-md w-full md:w-auto"
           >
-            <span className="text-base font-medium mb-1">Click icons in sidebar</span>
-            <span className="text-sm opacity-75">to open different sections</span>
+            <span className="text-base font-medium mb-1 text-white">Click icons in sidebar</span>
+            <span className="text-sm opacity-75 text-white">to open different sections</span>
           </motion.div>
           
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5 }}
-            className="instruction-item flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md w-full md:w-auto"
+            className="instruction-item flex flex-col items-center text-white px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md w-full md:w-auto"
           >
-            <span className="text-base font-medium mb-1">Drag cards around</span>
-            <span className="text-sm opacity-75">to organize your workspace</span>
+            <span className="text-base font-medium mb-1 ">{isMobile ? "Tap and drag cards" : "Drag cards around"}</span>
+            <span className="text-sm opacity-75">{isMobile ? "to reposition them" : "to organize your workspace"}</span>
           </motion.div>
         </div>
         
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-          className="instruction-item inline-flex flex-col items-center px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md mb-8"
-        >
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="mb-1"
+        {!isMobile && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8 }}
+            className="instruction-item inline-flex flex-col items-center text-white px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md mb-8"
           >
-            <span className="inline-block w-5 h-5 border-2 border-primary rounded-full"></span>
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="mb-1"
+            >
+              <span className="inline-block w-5 h-5 border-2 border-primary rounded-full"></span>
+            </motion.div>
+            <span className="text-base font-medium">Scroll to zoom</span>
           </motion.div>
-          <span className="text-base font-medium">Scroll to zoom</span>
-        </motion.div>
+        )}
+        
+        {isMobile && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8 }}
+            className="instruction-item inline-flex flex-col items-center text-white px-5 py-2.5 rounded-lg bg-card-bg border border-card-border backdrop-blur-sm shadow-md mb-8"
+          >
+            <span className="text-base font-medium">One card at a time</span>
+            <span className="text-sm opacity-75">for optimal mobile experience</span>
+          </motion.div>
+        )}
       </div>
     </div>
   );

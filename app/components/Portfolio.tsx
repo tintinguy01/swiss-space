@@ -214,11 +214,15 @@ export default function Portfolio() {
   };
   
   const toggleCardVisibility = (id: string) => {
-    // On mobile, we want to toggle just the selected card without hiding others
+    // On mobile, we want to open the selected card and close all others
     if (isMobile) {
+      const isCurrentlyVisible = cards.find(card => card.id === id)?.visible;
+      
       setCards(prevCards =>
         prevCards.map(card =>
-          card.id === id ? { ...card, visible: !card.visible } : card
+          card.id === id 
+            ? { ...card, visible: !isCurrentlyVisible } 
+            : isCurrentlyVisible ? card : { ...card, visible: false }
         )
       );
       
@@ -228,7 +232,8 @@ export default function Portfolio() {
         if (cardIsVisible) {
           return prev.filter(cardId => cardId !== id);
         } else {
-          return [...prev, id];
+          // On mobile, only show one card at a time
+          return [id];
         }
       });
     } else {

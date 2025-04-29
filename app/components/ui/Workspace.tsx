@@ -150,28 +150,8 @@ export default function Workspace({ children, isMobile = false }: WorkspaceProps
           {children}
         </motion.div>
         
-        {/* Control panel - always visible on mobile */}
-        <div className="control-panel">
-          <button className="control-button" onClick={zoomIn} title="Zoom In">
-            <MdZoomIn size={20} />
-          </button>
-          <button className="control-button" onClick={zoomOut} title="Zoom Out">
-            <MdZoomOut size={20} />
-          </button>
-          <button className="control-button" onClick={resetView} title="Reset View">
-            <MdOutlineFilterCenterFocus size={20} />
-          </button>
-          <button 
-            className={`control-button ${!gridVisible ? 'opacity-50' : ''}`} 
-            onClick={toggleGrid} 
-            title="Toggle Grid"
-          >
-            <MdGridOn size={20} />
-          </button>
-        </div>
-        
-        {/* Zoom indicator in bottom right */}
-        <div className="zoom-indicator">
+        {/* Remove zoom control panel for mobile */}
+        <div className="zoom-indicator" style={{ display: 'none' }}>
           {Math.round(scale * 100)}%
         </div>
       </div>

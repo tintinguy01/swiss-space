@@ -187,12 +187,12 @@ export default function DraggableCard({
           if (onDragEnd) onDragEnd(id, newPos);
         } else {
           // For desktop, update both X and Y
-          const newPos = { 
-            x: position.x + info.offset.x, 
-            y: position.y + info.offset.y 
-          };
-          setPosition(newPos);
-          if (onDragEnd) onDragEnd(id, newPos);
+        const newPos = { 
+          x: position.x + info.offset.x, 
+          y: position.y + info.offset.y 
+        };
+        setPosition(newPos);
+        if (onDragEnd) onDragEnd(id, newPos);
         }
       }}
       onClick={() => {
@@ -285,89 +285,89 @@ export default function DraggableCard({
       {/* Other resize handles */}
       {!isMobile && (
         <>
-          <div 
-            className="resizable-handle sw"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("sw", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
+      <div 
+        className="resizable-handle sw"
+        onMouseDown={(e) => {
+          e.stopPropagation();
           
-          <div 
-            className="resizable-handle ne"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("ne", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
+          let startX = e.clientX;
+          let startY = e.clientY;
           
-          <div 
-            className="resizable-handle nw"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              
-              let startX = e.clientX;
-              let startY = e.clientY;
-              
-              const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
-                const dx = mouseMoveEvent.clientX - startX;
-                const dy = mouseMoveEvent.clientY - startY;
-                handleResize("nw", dx, dy);
-                
-                // Update starting position for smoother, incremental movement
-                startX = mouseMoveEvent.clientX;
-                startY = mouseMoveEvent.clientY;
-              };
-              
-              const handleMouseUp = () => {
-                document.removeEventListener("mousemove", handleMouseMove);
-                document.removeEventListener("mouseup", handleMouseUp);
-              };
-              
-              document.addEventListener("mousemove", handleMouseMove);
-              document.addEventListener("mouseup", handleMouseUp);
-            }}
-          />
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("sw", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
+          
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
+      
+      <div 
+        className="resizable-handle ne"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          
+          let startX = e.clientX;
+          let startY = e.clientY;
+          
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("ne", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
+          
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
+      
+      <div 
+        className="resizable-handle nw"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          
+          let startX = e.clientX;
+          let startY = e.clientY;
+          
+          const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+            const dx = mouseMoveEvent.clientX - startX;
+            const dy = mouseMoveEvent.clientY - startY;
+            handleResize("nw", dx, dy);
+            
+            // Update starting position for smoother, incremental movement
+            startX = mouseMoveEvent.clientX;
+            startY = mouseMoveEvent.clientY;
+          };
+          
+          const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+          };
+          
+          document.addEventListener("mousemove", handleMouseMove);
+          document.addEventListener("mouseup", handleMouseUp);
+        }}
+      />
         </>
       )}
     </motion.div>
