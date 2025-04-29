@@ -195,7 +195,7 @@ export default function ContactCard() {
         setFormState({ name: "", email: "", message: "" });
         setFormErrors({ name: "", email: "", message: "" });
         setFormSubmitted(true);
-        toast.success("Message sent successfully!");
+        toast.success('Message Sent', 'Your message has been sent successfully.');
 
         // Reset submission status after delay
         setTimeout(() => {
@@ -210,7 +210,7 @@ export default function ContactCard() {
       setSubmitError(
         "Failed to send message. Please try again or contact directly via email."
       );
-      toast.error("Failed to send message");
+      toast.error('Error Sending Message', 'Please try again or contact directly via email.');
     } finally {
       setIsSubmitting(false);
     }
