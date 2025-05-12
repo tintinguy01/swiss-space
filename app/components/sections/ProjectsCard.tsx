@@ -23,16 +23,26 @@ export default function ProjectsCard() {
   const projects: Project[] = [
     {
       id: 1,
+      title: "Pagey AI",
+      description: "A modern web application that allows users to chat with their PDF documents using AI.",
+      image: "/images/PageyAI.png",
+      technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Python", "FastAPI", "PostgreSQL", "Clerk", "OpenAI", "Vercel", "Render", "Neon"],
+      githubUrl: "https://github.com/tintinguy01/pagey-ai",
+      liveUrl: "https://pagey-ai.vercel.app/",
+      color: "#3498db"
+    },
+    {
+      id: 2,
       title: "TaskFlow",
       description: "A task management app that streamlines task management and scheduling with customizable categories and dynamic progress tracking.",
       image: "/images/TaskFlow.png",
       technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Convex", "Clerk"],
       githubUrl: "https://github.com/tintinguy01/TaskFlow",
       liveUrl: "https://task-management-app-six-tau.vercel.app/",
-      color: "#3498db"
+      color: "#dbd834"
     },
     {
-      id: 2,
+      id: 3,
       title: "Movirev",
       description: "A movie review website that allows users to search for movies, read reviews, and leave their own reviews.",
       image: "/images/Movirev.png",
