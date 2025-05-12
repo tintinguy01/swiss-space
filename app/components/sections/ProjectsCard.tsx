@@ -25,7 +25,7 @@ export default function ProjectsCard() {
       id: 1,
       title: "Pagey AI",
       description: "A modern web application that allows users to chat with their PDF documents using AI.",
-      image: "/images/PageyAI.png",
+      image: "/images/PageyAi.png",
       technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Python", "FastAPI", "PostgreSQL", "Clerk", "OpenAI", "Vercel", "Render", "Neon"],
       githubUrl: "https://github.com/tintinguy01/pagey-ai",
       liveUrl: "https://pagey-ai.vercel.app/",
